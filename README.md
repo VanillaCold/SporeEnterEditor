@@ -1,4 +1,6 @@
-# EnterEditor adds three new cheats to Spore:
+# EnterEditor 
+
+This mod adds three new cheats to Spore:
 
 enterEditor lets you load into any editor.
 editCreation lets you load into any editor with any creation.
