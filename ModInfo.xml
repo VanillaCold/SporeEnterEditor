@@ -1,0 +1,4 @@
+<mod displayName="Enter Editor" unique="chocice75stateswitchercheatmodthing" description="This mod adds a cheat which is used to enter into any editor and a cheat which enters into any editor with any creation." installerSystemVersion="1.0.1.1" hasCustomInstaller="false" dllsBuild="2.5.20">
+	<prerequisite>entereditor.dll</prerequisite>
+	<prerequisite game="GalacticAdventures">entereditor.package</prerequisite>
+</mod>
