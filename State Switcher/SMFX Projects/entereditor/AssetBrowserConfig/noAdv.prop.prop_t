@@ -1,0 +1,6 @@
+key parent AssetBrowserConfig!GlobalTemplate.prop
+texts sporepediaConfigCallToActionMessage
+	(sporepedia!0x00040019) "placeholder"
+end
+key sporepediaConfigRootFilterID editable
+key sporepediaConfigSelectedFeed feed_all

@@ -1,0 +1,7 @@
+#The names of the .prop files in this folder (entereditoraliases) are all aliases.
+#The "Alias" property dictates what editor to send the player to when this alias is used.
+#It works like this: "key Alias editor_setup~![name of editor's .prop file]"  
+key Alias editor_setup~!GlobalTemplate
+#Make sure you also include a name for your alias to show up with the AliasList cheat! 
+#this doesn't affect the 
+string16 AliasName "Template - Loads the 'Global Template' editor."
