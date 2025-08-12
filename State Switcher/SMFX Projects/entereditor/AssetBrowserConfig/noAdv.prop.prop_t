@@ -4,3 +4,11 @@ texts sporepediaConfigCallToActionMessage
 end
 key sporepediaConfigRootFilterID editable
 key sporepediaConfigSelectedFeed feed_all
+
+bool sporepediaConfigEnableBanDeleteButton false
+bool sporepediaConfigEnablePublishButton false
+bool sporepediaConfigEnableEditButton false
+bool sporepediaConfigEnableMakeNewButton false
+bool sporepediaConfigEnableSelectionButton true
+bool sporepediaConfigLockFilterUI false
+bool sporepediaConfigShowPreviousFeed false

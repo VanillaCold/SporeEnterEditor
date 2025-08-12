@@ -52,34 +52,36 @@ const char* EditCreation::GetDescription(ArgScript::DescriptionMode mode) const
 
 void EditCreation::OnShopperAccept(const ResourceKey& selection)
 {
+	if (selection != ResourceKey(0, 0, 0))
+	{
+
+	}
+
+
+
+
 	if (selection.instanceID != 0) {
 		const char* carg = arg.c_str();
 		uint32_t aliaseditor = 0;
 		auto modemanager = Simulator::cGameModeManager::Get();
-		/*auto metadata = Pollinator::GetMetadata(selection.instanceID, selection.groupID);
-		App::ConsolePrintF("You selected the creation %ls", metadata->GetName().c_str());*/
-		bool CanBeUsed = true;
-		bool IsSimulator = false;
+
+		bool canBeUsed = true;
+		bool isSimulator = false;
 		bool isAlias = false;
 		PropertyListPtr propList;
-		auto IsValid = PropManager.GetPropertyList(id(carg), 0x40600100, propList);
+		auto isValidEditor = PropManager.GetPropertyList(id(carg), 0x40600100, propList);
 		ResourceKey key;
 
-		if (IsValid == true)
+		if (isValidEditor == true)
 		{
-			CanBeUsed = App::Property::GetKey(propList.get(), 0x00B2CCCB, key);  // checks if editor has parent
-			if (CanBeUsed == false) { CanBeUsed = App::Property::GetKey(propList.get(), 0x300DB745, key); }
+			canBeUsed = App::Property::GetKey(propList.get(), 0x00B2CCCB, key);  // checks if editor has parent
+			if (canBeUsed == false) 
+			{ 
+				canBeUsed = App::Property::GetKey(propList.get(), 0x300DB745, key); 
+			}
 		}
 		if (arg == "GlobalTemplate") { CanBeUsed = true; }
 		bool IsGoodGameMode = true;
-//		if (arg == "Creature") { IsValid = true; }
-//		if (arg == "Cell") { IsValid = true; }
-//		if (arg == "Building") { IsValid = true; }
-//		if (arg == "Vehicle") { IsValid = true; }
-//		if (arg == "Flora") { IsValid = true; }
-//		if (arg == "Tribal") { IsValid = true; }
-//		if (arg == "Civilian") { IsValid = true; }
-//		if (arg == "Captain") { IsValid = true; }
 
 		if ((IsValid == false && !line2.HasFlag("noAlias")) || line2.HasFlag("forceAlias")) {
 			if (PropManager.GetPropertyList(id(carg), id("entereditoraliases"), propList))
@@ -92,31 +94,22 @@ void EditCreation::OnShopperAccept(const ResourceKey& selection)
 
 		//GameModeManager.SetActiveModeByName(args[0]);
 		//check if the game mode is either space or main menu
-		auto Game = GameModeManager.GetActiveModeID();
-		if (Game != kGGEMode) { IsGoodGameMode = false; }
-		//	if (Game == kGameCell) { IsSimulator = true; }
-		//	if (Game == kGameCreature) { IsSimulator = true; IsGoodGameMode = false; }
-		//	if (Game == kGameTribe) { IsSimulator = true; IsGoodGameMode = false; }
-		//	if (Game == kGameCiv) { IsSimulator = true; IsGoodGameMode = false; }
+		auto gameMode = GameModeManager.GetActiveModeID();
+		IsGoodGameMode = gameMode ==
 		if (Game == kGameSpace) { IsSimulator = true; }
-		//	if (Simulator::IsScenarioMode()) { IsSimulator = true; }
-		if (IsValid == true || isAlias == true)
+		if (IsValid || isAlias)
 		{
-			if (IsGoodGameMode == true || IsSimulator == true)
+			if (IsGoodGameMode || IsSimulator)
 			{
-				if (CanBeUsed == true)
+				if (CanBeUsed)
 				{
 					EditorRequestPtr request = new Editors::EditorRequest();
-					if (isAlias == false) { request->editorID = id(carg); }
-//					if (arg == "Creature") { request->editorID = id("CreatureEditorExtraLarge"); }
-//					if (arg == "Cell") { request->editorID = id("CellTemplate"); }
-//					if (arg == "Building") { request->editorID = id("BuildingTemplate"); }
-//					if (arg == "Vehicle") { request->editorID = id("VehicleTemplate"); }
-//					if (arg == "Flora") { request->editorID = id("FloraEditorSetup"); }
-//					if (arg == "Tribal") { request->editorID = id("TribalAccessoriesEditorSetup"); }
-//					if (arg == "Civilian") { request->editorID = id("CivAccessoriesEditorSetup"); }
-//					if (arg == "Captain") { request->editorID = id("adventureraccessorieseditorsetup"); }
-					if (isAlias == true) { request->editorID = aliaseditor; }
+					request->editorID = id(carg);
+					if (isAlias == true) 
+					{ 
+						request->editorID = aliaseditor; 
+					}
+
 					request->allowSporepedia = true;
 					request->hasSaveButton = true;
 					request->hasExitButton = true;
@@ -124,9 +117,15 @@ void EditCreation::OnShopperAccept(const ResourceKey& selection)
 					request->hasPublishButton = true;
 					request->hasCreateNewButton = true;
 					request->creationKey = selection;
-					//modemanager->SubmitEditorRequest(request.get());
-					if (IsSimulator == false) { Editors::EditorRequest::Submit(request.get()); }
-					else { modemanager->SubmitEditorRequest(request.get()); }
+
+					if (IsSimulator == false) 
+					{ 
+						Editors::EditorRequest::Submit(request.get()); 
+					}
+					else 
+					{ 
+						modemanager->SubmitEditorRequest(request.get()); 
+					}
 					App::ConsolePrintF("Successfully entered editor.");
 				}
 				else

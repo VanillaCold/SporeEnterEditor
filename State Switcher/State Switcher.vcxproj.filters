@@ -28,6 +28,9 @@
     <ClInclude Include="AliasList.h">
       <Filter>State Switcher</Filter>
     </ClInclude>
+    <ClInclude Include="EnterEditor.h">
+      <Filter>State Switcher</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -43,6 +46,9 @@
       <Filter>State Switcher</Filter>
     </ClCompile>
     <ClCompile Include="AliasList.cpp">
+      <Filter>State Switcher</Filter>
+    </ClCompile>
+    <ClCompile Include="EnterEditor.cpp">
       <Filter>State Switcher</Filter>
     </ClCompile>
   </ItemGroup>

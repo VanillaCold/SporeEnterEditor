@@ -14,7 +14,7 @@ AliasList::~AliasList()
 void AliasList::ParseLine(const ArgScript::Line& line)
 {
 	vector<uint32_t> Aliases;
-	PropManager.GetAllListIDs(id("entereditoraliases"), Aliases);
+	PropManager.GetPropertyListIDs(id("entereditoraliases"), Aliases);
 	for (int i = 0; i < Aliases.capacity(); i += 1)
 	{
 		PropertyListPtr propList;
