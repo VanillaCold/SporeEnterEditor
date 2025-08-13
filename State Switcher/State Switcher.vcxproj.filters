@@ -19,9 +19,6 @@
     <ClInclude Include="stdafx.h">
       <Filter>Internal</Filter>
     </ClInclude>
-    <ClInclude Include="MyCheat.h">
-      <Filter>State Switcher</Filter>
-    </ClInclude>
     <ClInclude Include="EditCreation.h">
       <Filter>State Switcher</Filter>
     </ClInclude>
@@ -38,9 +35,6 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Internal</Filter>
-    </ClCompile>
-    <ClCompile Include="MyCheat.cpp">
-      <Filter>State Switcher</Filter>
     </ClCompile>
     <ClCompile Include="EditCreation.cpp">
       <Filter>State Switcher</Filter>

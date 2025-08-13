@@ -1,6 +1,6 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
-#include "MyCheat.h"
+#include "EnterEditor.h"
 #include "EditCreation.h"
 #include "AliasList.h"
 
@@ -13,7 +13,7 @@ void Initialize()
 	//  - Add new game modes
 	//  - Add new space tools
 	//  - Change materials
-	CheatManager.AddCheat("entereditor", new MyCheat());
+	CheatManager.AddCheat("entereditor", new EnterEditor());
 	CheatManager.AddCheat("editcreation", new EditCreation());
 	CheatManager.AddCheat("aliasList", new AliasList());
 }

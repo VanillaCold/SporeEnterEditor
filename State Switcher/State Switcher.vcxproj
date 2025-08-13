@@ -110,10 +110,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="MyCheat.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -135,10 +131,6 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="EnterEditor.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="MyCheat.cpp">
       <SubType>
       </SubType>
     </ClCompile>

@@ -6,8 +6,6 @@ class EditCreation
 	: public ArgScript::ICommand
 	, public Sporepedia::IShopperListener
 {
-	string arg = "hoi";
-	ArgScript::Line line2;
 public:
 	EditCreation();
 	~EditCreation();
@@ -16,6 +14,9 @@ public:
 	void ParseLine(const ArgScript::Line& line) override;
 
 	void OnShopperAccept(const ResourceKey& selection) override;
+
+	uint32_t mEditorID;
+	bool mbIsSimulator;
 	
 	// Returns a string containing the description. If mode != DescriptionMode::Basic, return a more elaborated description
 	const char* GetDescription(ArgScript::DescriptionMode mode) const override;

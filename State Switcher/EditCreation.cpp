@@ -13,9 +13,79 @@ EditCreation::~EditCreation()
 
 void EditCreation::ParseLine(const ArgScript::Line& line)
 {
+	// This method is called when your cheat is invoked.
+	// Put your cheat code here.
+	bool isAlias = line.HasFlag("alias");
+	bool noAlias = line.HasFlag("noAlias");
+	bool bSimulatorMode = false;
+	if (GameModeManager.GetActiveModeID() == GameModeIDs::kEditorMode)
+	{
+		App::ConsolePrintF("Error; this cheat cannot be used from inside the editor.");
+		App::ConsolePrintF("Return to the main menu to use this cheat.");
+	}
+
+	if (noAlias && isAlias)
+	{
+		App::ConsolePrintF("Error; Both alias and noAlias flags were set.");
+		return;
+	}
+
 	auto args = line.GetArguments(1);
-	line2 = line;
-	arg = args[0];
+	uint32_t inputHash = id(args[0]);
+	if (line.HasFlag("hash"))
+	{
+		inputHash = mpFormatParser->ParseUInt(args[0]);
+	}
+
+
+	if (!noAlias && !isAlias)
+	{
+		// check which to use.
+		isAlias = PropManager.HasPropertyList(inputHash, id("entereditoraliases"));
+		noAlias = PropManager.HasPropertyList(inputHash, GroupIDs::EditorConfig);
+
+		if (isAlias && noAlias)
+		{
+			App::ConsolePrintF("There is both an alias and an editor under that name. \nPlease use the command with either -alias or -noAlias to use this name.");
+			return;
+		}
+
+		if (!noAlias && !isAlias)
+		{
+			App::ConsolePrintF("There is no editor, or alias, under that name.");
+			return;
+		}
+	}
+
+	uint32_t editorID = inputHash;
+
+	if (isAlias)
+	{
+		PropertyListPtr propList;
+
+		if (PropManager.GetPropertyList(inputHash, id("entereditoraliases"), propList))
+		{
+			ResourceKey key;
+			App::Property::GetKey(propList.get(), id("Alias"), key);
+			editorID = key.instanceID;
+
+			if (!PropManager.HasPropertyList(editorID, GroupIDs::EditorConfig))
+			{
+				App::ConsolePrintF("This alias is invalid; it points to an editor which does not exist.");
+			}
+		}
+	}
+
+
+	if (GameModeManager.GetActiveModeID() != GameModeIDs::kEditorMode)
+	{
+		bSimulatorMode = true;
+	}
+
+
+	mbIsSimulator = bSimulatorMode;
+	mEditorID = editorID;
+
 	Sporepedia::ShopperRequest request(this);
 	request.shopperID = id("noAdv");
 	Sporepedia::ShopperRequest::Show(request);
@@ -54,95 +124,30 @@ void EditCreation::OnShopperAccept(const ResourceKey& selection)
 {
 	if (selection != ResourceKey(0, 0, 0))
 	{
+		Editors::EditorRequest* request = new Editors::EditorRequest();
 
-	}
+		request->editorID = mEditorID;
+		request->allowSporepedia = true;
+		request->hasSaveButton = true;
+		request->hasExitButton = true;
+		request->sporepediaCanSwitch = true;
+		request->hasPublishButton = false;
+		request->hasCreateNewButton = true;
 
+		request->creationKey = selection;
 
-
-
-	if (selection.instanceID != 0) {
-		const char* carg = arg.c_str();
-		uint32_t aliaseditor = 0;
-		auto modemanager = Simulator::cGameModeManager::Get();
-
-		bool canBeUsed = true;
-		bool isSimulator = false;
-		bool isAlias = false;
-		PropertyListPtr propList;
-		auto isValidEditor = PropManager.GetPropertyList(id(carg), 0x40600100, propList);
-		ResourceKey key;
-
-		if (isValidEditor == true)
+		if (mbIsSimulator)
 		{
-			canBeUsed = App::Property::GetKey(propList.get(), 0x00B2CCCB, key);  // checks if editor has parent
-			if (canBeUsed == false) 
-			{ 
-				canBeUsed = App::Property::GetKey(propList.get(), 0x300DB745, key); 
-			}
-		}
-		if (arg == "GlobalTemplate") { CanBeUsed = true; }
-		bool IsGoodGameMode = true;
-
-		if ((IsValid == false && !line2.HasFlag("noAlias")) || line2.HasFlag("forceAlias")) {
-			if (PropManager.GetPropertyList(id(carg), id("entereditoraliases"), propList))
-			{
-				isAlias = true;
-				App::Property::GetKey(propList.get(), id("Alias"), key);
-				aliaseditor = key.instanceID;
-			}
-		}
-
-		//GameModeManager.SetActiveModeByName(args[0]);
-		//check if the game mode is either space or main menu
-		auto gameMode = GameModeManager.GetActiveModeID();
-		IsGoodGameMode = gameMode ==
-		if (Game == kGameSpace) { IsSimulator = true; }
-		if (IsValid || isAlias)
-		{
-			if (IsGoodGameMode || IsSimulator)
-			{
-				if (CanBeUsed)
-				{
-					EditorRequestPtr request = new Editors::EditorRequest();
-					request->editorID = id(carg);
-					if (isAlias == true) 
-					{ 
-						request->editorID = aliaseditor; 
-					}
-
-					request->allowSporepedia = true;
-					request->hasSaveButton = true;
-					request->hasExitButton = true;
-					request->sporepediaCanSwitch = true;
-					request->hasPublishButton = true;
-					request->hasCreateNewButton = true;
-					request->creationKey = selection;
-
-					if (IsSimulator == false) 
-					{ 
-						Editors::EditorRequest::Submit(request.get()); 
-					}
-					else 
-					{ 
-						modemanager->SubmitEditorRequest(request.get()); 
-					}
-					App::ConsolePrintF("Successfully entered editor.");
-				}
-				else
-				{
-					App::ConsolePrintF("That editor does technically exist but isn't an actual editor.");
-				}
-			}
-			else
-			{
-				App::ConsolePrintF("Invalid gamemode. Use this command inside either the main menu or the space stage.");
-			}
+			Simulator::cGameModeManager::Get()->SubmitEditorRequest(request);
 		}
 		else
 		{
-			App::ConsolePrintF("Not a valid editor/alias.\n"
-				"If you're using an alias, remember that they're case-sensitive.");
+			Editors::EditorRequest::Submit(request);
 		}
-
+	}
+	
+	else
+	{
+		App::ConsolePrintF("No valid creation selected.");
 	}
 }
