@@ -77,7 +77,7 @@ void EditCreation::ParseLine(const ArgScript::Line& line)
 	}
 
 
-	if (GameModeManager.GetActiveModeID() != GameModeIDs::kEditorMode)
+	if (GameModeManager.GetActiveModeID() != GameModeIDs::kGGEMode)
 	{
 		bSimulatorMode = true;
 	}
