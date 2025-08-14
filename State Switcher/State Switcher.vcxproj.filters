@@ -22,9 +22,6 @@
     <ClInclude Include="EditCreation.h">
       <Filter>State Switcher</Filter>
     </ClInclude>
-    <ClInclude Include="AliasList.h">
-      <Filter>State Switcher</Filter>
-    </ClInclude>
     <ClInclude Include="EnterEditor.h">
       <Filter>State Switcher</Filter>
     </ClInclude>
@@ -37,9 +34,6 @@
       <Filter>Internal</Filter>
     </ClCompile>
     <ClCompile Include="EditCreation.cpp">
-      <Filter>State Switcher</Filter>
-    </ClCompile>
-    <ClCompile Include="AliasList.cpp">
       <Filter>State Switcher</Filter>
     </ClCompile>
     <ClCompile Include="EnterEditor.cpp">

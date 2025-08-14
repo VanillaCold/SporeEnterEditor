@@ -107,27 +107,36 @@ void EnterEditor::ParseLine(const ArgScript::Line& line)
 const char* EnterEditor::GetDescription(ArgScript::DescriptionMode mode) const
 {
 	if (mode == ArgScript::DescriptionMode::Basic) {
-		return "This cheat lets you enter any editor, using either its name found in .package files or an alias.";
+		return "This cheat lets you enter any specified editor, using either its name found in .package files or an alias.";
 	}
 	else {
-		return "\n"
-			"Enters the editor corresponding to the given name, if a .prop file with the given name exists in the editor_setup~ folder.\n"
-			"Only works with actual editors found in the editor_setup~ folder or the aliases. (see below)\n"
-			"Mods can include their own aliases, though the mod developer needs to add them.\n"
-			"Aliases included with Enter Editor:\n"
-			"\n"
-			"'Creature' - Loads the creature editor.\n"
-			"'Cell' - Loads the cell editor setup.\n"
-			"'Building' - Loads the building editor setup.\n"
-			"'Vehicle' - Loads the vehicle editor setup.\n"
-			"'Flora' - Loads the flora editor setup.\n"
-			"'Tribal' - Loads the tribal stage outfitter.\n"
-			"'Civilian' - Loads the civilization stage outfitter.\n"
-			"'Captain' - Loads the captain outfitter.\n"
-			"\n"
-			"Use the '-forceAlias' flag to use an alias if both an editor and an alias share the same name.\n"
-			"Use the '-noAlias' flag to disable the use of aliases\n."
-			"\n"
-			"To see modded aliases, use the 'aliasList' cheat.";
+
+		vector<uint32_t> aliases;
+		set<string> aliasNames;
+		PropManager.GetPropertyListIDs(id("entereditoraliases"), aliases);
+		for (int i = 0; i < aliases.size(); i += 1)
+		{
+			PropertyListPtr propList;
+			string16 currentName;
+			if (PropManager.GetPropertyList(aliases[i], id("entereditoraliases"), propList)) {
+
+				App::Property::GetString16(propList.get(), id("AliasName"), currentName);
+				string asciiName;
+				asciiName.assign_convert(currentName);
+				aliasNames.insert(asciiName);
+			}
+		}
+
+		string* str = new string("");
+		*str = "\n"
+			"Usage: entereditor (editorName) [-noAlias/-alias] [-hash]\n"
+			"List of aliases:\n";
+
+		for (auto node = aliasNames.begin(); node != aliasNames.end(); node++)
+		{
+			*str += node.mpNode->mValue + "\n";
+		}
+
+		return str->c_str();
 	}
 }

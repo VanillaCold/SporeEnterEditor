@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "EnterEditor.h"
 #include "EditCreation.h"
-#include "AliasList.h"
 
 void Initialize()
 {
@@ -15,7 +14,6 @@ void Initialize()
 	//  - Change materials
 	CheatManager.AddCheat("entereditor", new EnterEditor());
 	CheatManager.AddCheat("editcreation", new EditCreation());
-	CheatManager.AddCheat("aliasList", new AliasList());
 }
 
 void Dispose()
